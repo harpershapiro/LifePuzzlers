@@ -11,5 +11,15 @@
   "manualUrl": "",
   "sourceUrl": "",
   "donateUrl": "",
-  "modules": []
+  "modules": [
+    {
+      "slug": "Saturator",
+      "name": "Saturator",
+      "description": "A simple saturator.",
+      "tags": [
+        "Distortion",
+        "Saturation"
+      ]
+    }
+  ]
 }

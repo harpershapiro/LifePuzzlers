@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="150.2265"
+   height="380"
+   viewBox="0 0 39.747429 100.54167"
+   version="1.1"
+   id="svg11003"
+   inkscape:version="0.92.4 (unknown)"
+   sodipodi:docname="Saturator.svg">
+  <defs
+     id="defs10997" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="-244.85633"
+     inkscape:cy="191.21794"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1299"
+     inkscape:window-height="711"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     units="px"
+     showguides="true" />
+  <metadata
+     id="metadata11000">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-35.146312,-50.389004)"
+     style="display:inline">
+    <path
+       inkscape:connector-curvature="0"
+       id="path33493"
+       d="M 35.219628,50.462323 H 74.821509 V 150.85843 H 35.219628 Z m 0,0"
+       style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27602378"
+       inkscape:export-filename="/home/vortico/pics/tmp/LFOs.png"
+       inkscape:export-xdpi="150.22649"
+       inkscape:export-ydpi="150.22649" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="components"
+     style="display:none">
+    <circle
+       id="path17"
+       cx="19.873714"
+       cy="26.240738"
+       r="5.6126599"
+       style="fill:#00ff00;fill-opacity:1;stroke-width:0.26458332" />
+    <circle
+       id="path19"
+       cx="19.873714"
+       cy="74.616524"
+       r="5.8799295"
+       style="fill:#0000ff;fill-opacity:1;stroke-width:0.26458332" />
+  </g>
+</svg>
