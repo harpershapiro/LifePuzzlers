@@ -22,19 +22,24 @@ struct Saturator : Module {
 	}
 
 	void process(const ProcessArgs &args) override {
-		Input &in = inputs[PATH17_INPUT];
-		int channels = in.getChannels();
+		Input audioinput = inputs[PATH17_INPUT];
+		int channels = audioinput.getChannels();
+		float in[16] = {};
+		audioinput.readVoltages(in);
+		/**
 		simd::float_4 v[4];
 		for (int c = 0; c < channels; c += 4) {
 			v[c / 4] = simd::float_4::load(in.getVoltages(c));
-		}
+		}**/
 
 
 		Output &out = outputs[PATH19_OUTPUT];
 		out.setChannels(channels);
+		out.writeVoltages(in);
+		/**
 		for (int c = 0; c < channels; c += 4) {
 			v[c / 4].store(out.getVoltages(c));
-		}
+		}**/
 
 	}
 };

@@ -15,7 +15,7 @@
    version="1.1"
    id="svg11003"
    inkscape:version="0.92.4 (unknown)"
-   sodipodi:docname="Saturator.svg">
+   sodipodi:docname="WarmFilter.svg">
   <defs
      id="defs10997" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.9899495"
-     inkscape:cx="-244.85633"
-     inkscape:cy="191.21794"
+     inkscape:cx="-70.272979"
+     inkscape:cy="192.87506"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -35,10 +35,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1299"
-     inkscape:window-height="711"
-     inkscape:window-x="67"
-     inkscape:window-y="27"
+     inkscape:window-width="1161"
+     inkscape:window-height="632"
+     inkscape:window-x="178"
+     inkscape:window-y="46"
      inkscape:window-maximized="0"
      units="px"
      showguides="true" />
@@ -76,15 +76,27 @@
      style="display:none">
     <circle
        id="path17"
-       cx="19.873714"
-       cy="26.240738"
+       cx="16.39921"
+       cy="84.505501"
        r="5.6126599"
        style="fill:#00ff00;fill-opacity:1;stroke-width:0.26458332" />
     <circle
        id="path19"
-       cx="19.873714"
-       cy="74.616524"
+       cx="34.039001"
+       cy="83.70369"
        r="5.8799295"
        style="fill:#0000ff;fill-opacity:1;stroke-width:0.26458332" />
+    <circle
+       style="fill:#ff0000;fill-opacity:1;stroke-width:0.26458332"
+       id="path4536"
+       cx="26.326048"
+       cy="23.701677"
+       r="7.0826426" />
+    <circle
+       style="fill:#ff0000;fill-opacity:1;stroke-width:0.26458332"
+       id="path4538"
+       cx="26.726952"
+       cy="52.70042"
+       r="6.9490075" />
   </g>
 </svg>

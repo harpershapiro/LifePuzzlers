@@ -20,6 +20,14 @@
         "Distortion",
         "Saturation"
       ]
+    },
+    {
+      "slug": "StateVariableFilter",
+      "name": "StateVariableFilter",
+      "description": "A simple filter.",
+      "tags": [
+        "Filter"
+      ]
     }
   ]
 }
