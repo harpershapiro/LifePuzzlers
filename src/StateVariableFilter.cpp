@@ -20,7 +20,8 @@ struct StateVariableFilter : Module {
 	};
 
 	//state of filter
-	float low;
+	float lowpass, highpass, bandpass, notch;
+	float freq; //center frequency based on cutoff
 	float cutoff;
 	float res;
 	float sampleRate;
@@ -30,6 +31,7 @@ struct StateVariableFilter : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(CUTOFF_PARAM, 0.f, 1.f, 0.5f, "Frequency", " Hz", std::pow(2, 10.f), dsp::FREQ_C4 / std::pow(2, 5.f));
 		configParam(RES_PARAM, 0.f, 1.f, 0.f, "");
+		lowpass=highpass=bandpass=notch=0;
 	}
 
 	void process(const ProcessArgs &args) override {
@@ -37,34 +39,34 @@ struct StateVariableFilter : Module {
 			return;
 		}
 
-	    int channels = std::max(1, inputs[AUDIO_INPUT].getChannels());
-	    float in[16] = {};
-	    float out[16] = {};
-	    Input audioinput = inputs[AUDIO_INPUT];
 
-	    audioinput.readVoltages(in);
-
-
+		//get input sample and params
+	    Input &audioInput = inputs[AUDIO_INPUT];
+	    float input = audioInput.getVoltage();
 		cutoff = params[CUTOFF_PARAM].getValue();
 		res = params[RES_PARAM].getValue();
-		printf("Cutoff: %f\n", cutoff);
-
-
-		//doesn't seem to capture actual sample rate. but will use it anyway
 		sampleRate = (1.0/args.sampleTime);
 
+
+		freq = 2*sin(M_PI*cutoff/sampleRate); //check cutoff range
+
+		//printf("Cutoff: %f\n", cutoff);
+
+		lowpass = input;
+
 		//can increase to more channels
-		out[0] = in[0];
+		//out[0] = in[0];
 
 		// simple frequency tuning with error towards nyquist  
 		// F is the filter's center frequency, and Fs is the sampling rate  
 		//F1 = 2*pi*F/Fs 
 
-		Output &audiooutput = outputs[AUDIO_OUTPUT];
-		audiooutput.setChannels(channels);
-		audiooutput.writeVoltages(out);
-		low = out[0];
-		printf("low: %f\n", low);
+		Output &audioOutput = outputs[AUDIO_OUTPUT];
+		audioOutput.setVoltage(lowpass);
+		//audiooutput.setChannels(channels);
+		//audiooutput.writeVoltages(out);
+		//low = out[0];
+		//printf("low: %f\n", low);
 		
 		
 		
