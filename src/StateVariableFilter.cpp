@@ -24,6 +24,7 @@ struct StateVariableFilter : Module {
 	float freq; //center frequency based on cutoff
 	float cutoff;
 	float res;
+	float scale;
 	float sampleRate;
 
 
@@ -43,16 +44,22 @@ struct StateVariableFilter : Module {
 		//get input sample and params
 	    Input &audioInput = inputs[AUDIO_INPUT];
 	    float input = audioInput.getVoltage();
-		cutoff = params[CUTOFF_PARAM].getValue();
-		res = params[RES_PARAM].getValue();
+	    float cutoffParam = params[CUTOFF_PARAM].getValue() * 10.f - 5.f;
+		float resParam = params[RES_PARAM].getValue();
 		sampleRate = (1.0/args.sampleTime);
 
+		//set state
+		cutoff = dsp::FREQ_C4 * pow(2.f, cutoffParam);
+		scale = res = resParam;
 
-		freq = 2*sin(M_PI*cutoff/sampleRate); //check cutoff range
+		freq = 2*M_PI*cutoff/sampleRate; //check cutoff range
 
-		//printf("Cutoff: %f\n", cutoff);
+		printf("Cutoff: %f\n", cutoff);
 
-		lowpass = input;
+		lowpass = lowpass+freq*bandpass;
+		highpass = scale*input - lowpass - res*bandpass;
+		bandpass = freq * highpass + bandpass;
+		notch = highpass+lowpass;
 
 		//can increase to more channels
 		//out[0] = in[0];
@@ -62,7 +69,7 @@ struct StateVariableFilter : Module {
 		//F1 = 2*pi*F/Fs 
 
 		Output &audioOutput = outputs[AUDIO_OUTPUT];
-		audioOutput.setVoltage(lowpass);
+		audioOutput.setVoltage(5.0*lowpass);
 		//audiooutput.setChannels(channels);
 		//audiooutput.writeVoltages(out);
 		//low = out[0];
