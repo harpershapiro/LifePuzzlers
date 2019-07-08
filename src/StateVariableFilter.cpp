@@ -12,7 +12,10 @@ struct StateVariableFilter : Module {
 		NUM_INPUTS
 	};
 	enum OutputIds {
-		AUDIO_OUTPUT,
+		LOW_OUTPUT,
+		HIGH_OUTPUT,
+		BAND_OUTPUT,
+		NOTCH_OUTPUT,
 		NUM_OUTPUTS
 	};
 	enum LightIds {
@@ -36,7 +39,10 @@ struct StateVariableFilter : Module {
 	}
 
 	void process(const ProcessArgs &args) override {
-		if (!outputs[AUDIO_OUTPUT].isConnected()) {
+		if (!(outputs[LOW_OUTPUT].isConnected()  || 
+			  outputs[HIGH_OUTPUT].isConnected() ||
+			  outputs[BAND_OUTPUT].isConnected() ||
+			  outputs[NOTCH_OUTPUT].isConnected())) {
 			return;
 		}
 
@@ -68,8 +74,10 @@ struct StateVariableFilter : Module {
 		// F is the filter's center frequency, and Fs is the sampling rate  
 		//F1 = 2*pi*F/Fs 
 
-		Output &audioOutput = outputs[AUDIO_OUTPUT];
-		audioOutput.setVoltage(5.0*lowpass);
+		outputs[LOW_OUTPUT].setVoltage(5.0*lowpass);
+		outputs[HIGH_OUTPUT].setVoltage(5.0*highpass);
+		outputs[BAND_OUTPUT].setVoltage(5.0*highpass);
+		outputs[NOTCH_OUTPUT].setVoltage(5.0*notch);
 		//audiooutput.setChannels(channels);
 		//audiooutput.writeVoltages(out);
 		//low = out[0];
@@ -94,9 +102,15 @@ struct StateVariableFilterWidget : ModuleWidget {
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.326, 23.702)), module, StateVariableFilter::CUTOFF_PARAM));
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.727, 52.7)), module, StateVariableFilter::RES_PARAM));
 
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(16.399, 84.506)), module, StateVariableFilter::AUDIO_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 20)), module, StateVariableFilter::AUDIO_INPUT));
 
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(34.039, 83.704)), module, StateVariableFilter::AUDIO_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(10, 83.704)), module, StateVariableFilter::LOW_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(20, 83.704)), module, StateVariableFilter::HIGH_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30, 83.704)), module, StateVariableFilter::BAND_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(40, 83.704)), module, StateVariableFilter::NOTCH_OUTPUT));
+
+
+
 	}
 };
 
