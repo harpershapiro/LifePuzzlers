@@ -4,7 +4,8 @@
 struct StateVariableFilter : Module {
 	enum ParamIds {
 		CUTOFF_PARAM,
-		RES_PARAM,
+		DAMP_PARAM,
+		DRIVE_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -26,15 +27,16 @@ struct StateVariableFilter : Module {
 	float lowpass, highpass, bandpass, notch;
 	float freq; //center frequency based on cutoff
 	float cutoff;
-	float res;
-	float scale;
+	float damp;
+	float drive;
 	float sampleRate;
 
 
 	StateVariableFilter() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(CUTOFF_PARAM, 0.f, 1.f, 0.5f, "Frequency", " Hz", std::pow(2, 10.f), dsp::FREQ_C4 / std::pow(2, 5.f));
-		configParam(RES_PARAM, 0.f, 1.f, 0.f, "");
+		configParam(DAMP_PARAM, 0.f, 1.f, 0.f, "Damping");
+		configParam(DRIVE_PARAM,0.f,1.f,0.f,"Drive","",0,10);
 		lowpass=highpass=bandpass=notch=0;
 	}
 
@@ -51,29 +53,27 @@ struct StateVariableFilter : Module {
 	    Input &audioInput = inputs[AUDIO_INPUT];
 	    float input = audioInput.getVoltage();
 	    float cutoffParam = params[CUTOFF_PARAM].getValue() * 10.f - 5.f;
-		float resParam = params[RES_PARAM].getValue();
+		float dampParam = params[DAMP_PARAM].getValue();
+		float driveParam = params[DRIVE_PARAM].getValue();
 		sampleRate = (1.0/args.sampleTime);
 
 		//set state
+		float gain = pow(1.f + driveParam, 5); //gain from drive
 		cutoff = dsp::FREQ_C4 * pow(2.f, cutoffParam);
-		scale = res = resParam;
+		damp = 1 - clamp(dampParam,0.1f,1.f); //invert damping param just for intuition
+		freq = 2*M_PI*cutoff/sampleRate; //set center frequency
+		//modify input signal
+		input += 1e-5f * (2.f * random::uniform() - 1.f);
+		input *= gain;
 
-		freq = 2*M_PI*cutoff/sampleRate; //check cutoff range
 
-		printf("Cutoff: %f\n", cutoff);
-
+		//SVF model
 		lowpass = lowpass+freq*bandpass;
-		highpass = scale*input - lowpass - res*bandpass;
+		highpass = damp*input - lowpass - damp*bandpass;
 		bandpass = freq * highpass + bandpass;
 		notch = highpass+lowpass;
 
-		//can increase to more channels
-		//out[0] = in[0];
-
-		// simple frequency tuning with error towards nyquist  
-		// F is the filter's center frequency, and Fs is the sampling rate  
-		//F1 = 2*pi*F/Fs 
-
+		//set outs
 		outputs[LOW_OUTPUT].setVoltage(5.0*lowpass);
 		outputs[HIGH_OUTPUT].setVoltage(5.0*highpass);
 		outputs[BAND_OUTPUT].setVoltage(5.0*highpass);
@@ -100,14 +100,16 @@ struct StateVariableFilterWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.326, 23.702)), module, StateVariableFilter::CUTOFF_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.727, 52.7)), module, StateVariableFilter::RES_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.727, 52.7)), module, StateVariableFilter::DAMP_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.727, 62.7)), module, StateVariableFilter::DRIVE_PARAM));
+
 
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 20)), module, StateVariableFilter::AUDIO_INPUT));
 
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(10, 83.704)), module, StateVariableFilter::LOW_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(20, 83.704)), module, StateVariableFilter::HIGH_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30, 83.704)), module, StateVariableFilter::BAND_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(40, 83.704)), module, StateVariableFilter::NOTCH_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(15, 85)), module, StateVariableFilter::LOW_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35, 85)), module, StateVariableFilter::HIGH_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(15, 105)), module, StateVariableFilter::BAND_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35, 105)), module, StateVariableFilter::NOTCH_OUTPUT));
 
 
 
