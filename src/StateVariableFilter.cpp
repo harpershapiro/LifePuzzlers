@@ -4,8 +4,11 @@
 struct StateVariableFilter : Module {
 	enum ParamIds {
 		CUTOFF_PARAM,
+		CUTOFF_CV_PARAM,
 		DAMP_PARAM,
+		DAMP_CV_PARAM,
 		DRIVE_PARAM,
+		DRIVE_CV_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -48,13 +51,15 @@ struct StateVariableFilter : Module {
 			return;
 		}
 
-
 		//get input sample and params
 	    Input &audioInput = inputs[AUDIO_INPUT];
-	    float input = audioInput.getVoltage();
-	    float cutoffParam = params[CUTOFF_PARAM].getValue() * 10.f - 5.f;
+	    float input = audioInput.getVoltageSum();
+	    float cutoffParam = params[CUTOFF_PARAM].getValue() * 10.f - 5.f; //some extra processing for freq. conversion
+	    float cutoffCV = params[CUTOFF_CV_PARAM].getValue();
 		float dampParam = params[DAMP_PARAM].getValue();
+		float dampCV = params[DAMP_CV_PARAM].getValue();
 		float driveParam = params[DRIVE_PARAM].getValue();
+		float driveCV = params[DRIVE_CV_PARAM].getValue();
 		sampleRate = (1.0/args.sampleTime);
 
 		//set state
@@ -93,23 +98,29 @@ struct StateVariableFilterWidget : ModuleWidget {
 	StateVariableFilterWidget(StateVariableFilter *module) {
 		setModule(module);
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/StateVariableFilter.svg")));
+		printf("X: %f  Y: %f\n",box.size.x,box.size.y);
 
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.326, 23.702)), module, StateVariableFilter::CUTOFF_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.727, 52.7)), module, StateVariableFilter::DAMP_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.727, 62.7)), module, StateVariableFilter::DRIVE_PARAM));
+		addParam(createParamCentered<RoundHugeBlackKnob>(mm2px(Vec(26, 20)), module, StateVariableFilter::CUTOFF_PARAM));
+		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(26, 40)), module, StateVariableFilter::DAMP_PARAM));
+		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(26, 60)), module, StateVariableFilter::DRIVE_PARAM));
+		
+		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(40, 20)), module, StateVariableFilter::CUTOFF_CV_PARAM));
+		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(40, 40)), module, StateVariableFilter::DAMP_CV_PARAM));
+		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(40, 60)), module, StateVariableFilter::DRIVE_CV_PARAM));
+
 
 
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 20)), module, StateVariableFilter::AUDIO_INPUT));
 
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(15, 85)), module, StateVariableFilter::LOW_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35, 85)), module, StateVariableFilter::HIGH_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(15, 105)), module, StateVariableFilter::BAND_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35, 105)), module, StateVariableFilter::NOTCH_OUTPUT));
+		addOutput(createOutput<PJ301MPort>(Vec(45, 280), module, StateVariableFilter::LOW_OUTPUT));
+		addOutput(createOutput<PJ301MPort>(Vec(80, 280), module, StateVariableFilter::HIGH_OUTPUT));
+		addOutput(createOutput<PJ301MPort>(Vec(45, 320), module, StateVariableFilter::BAND_OUTPUT));
+		addOutput(createOutput<PJ301MPort>(Vec(80, 320), module, StateVariableFilter::NOTCH_OUTPUT));
 
 
 
