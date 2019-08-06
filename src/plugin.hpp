@@ -10,3 +10,4 @@ extern Plugin *pluginInstance;
 // extern Model *modelMyModule;
 extern Model *modelSaturator;
 extern Model *modelStateVariableFilter;
+extern Model *modelKingMod;

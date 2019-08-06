@@ -28,6 +28,15 @@
       "tags": [
         "Filter"
       ]
+    },
+    {
+      "slug": "KingMod",
+      "name": "KingMod",
+      "description": "A royal ring.",
+      "tags": [
+        "Modulation",
+        "Ring Mod"
+      ]
     }
   ]
 }
