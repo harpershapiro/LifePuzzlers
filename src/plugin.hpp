@@ -11,3 +11,5 @@ extern Plugin *pluginInstance;
 extern Model *modelSaturator;
 extern Model *modelStateVariableFilter;
 extern Model *modelKingMod;
+extern Model *modelPrehumanSines;
+

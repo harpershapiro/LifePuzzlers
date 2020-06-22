@@ -37,6 +37,15 @@
         "Modulation",
         "Ring Mod"
       ]
+    },
+    {
+      "slug": "PrehumanSines",
+      "name": "PrehumanSines",
+      "description": "A quad sine generator. An infinite choir",
+      "tags": [
+        "VCO",
+        "Chord"
+      ]
     }
   ]
 }
